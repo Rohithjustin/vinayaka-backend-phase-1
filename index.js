@@ -2,15 +2,22 @@ require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 
+const connectDB = require('./config/mongodb');
+const authRoutes = require('./routes/auth');
+
 const app = express();
+connectDB();  // Connect to MongoDB
 
 // Middleware
-app.use(cors());
-app.use(express.json());
+app.use(express.json());  // Parse incoming JSON requests
+app.use(cors());  // Enable CORS for cross-origin requests
 
-// Simple Route
-app.get("/", (req, res) => {
-  res.send("Server is running...");
+// Routes
+app.use('/auth', authRoutes);
+
+// Protected Route Example
+app.get('/', (req, res) => {
+  res.json({ msg: 'Welcome to the Big Market APIs' });
 });
 
 // Start Server
